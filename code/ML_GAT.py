@@ -190,10 +190,9 @@ result_prediction_train = pd.concat([pd.DataFrame(tr_id), pd.DataFrame(predicted
 result_prediction_train.columns = ['id','predicted','actual']  
 
 ## Extract marker effects
-bline = tuple([0] * len(data.x_dict))
 explainer = Explainer(
     model = model,
-    algorithm=CaptumExplainer('IntegratedGradients',baselines=bline),
+    algorithm=CaptumExplainer('IntegratedGradients'),
     explanation_type='model',
     node_mask_type='attributes',
     edge_mask_type=None, # do not change here
@@ -201,8 +200,7 @@ explainer = Explainer(
         mode='regression',
         task_level='node',
         return_type='raw',
-        ),
-    threshold_config=dict(threshold_type='topk', value=10),
+        )
 )
 
 hetero_explanation = explainer(
@@ -213,6 +211,10 @@ hetero_explanation = explainer(
 effect = pd.DataFrame()
 for ii in range(1,len(data.x_dict)):
     effect = pd.concat([effect, pd.DataFrame(hetero_explanation['qtl_'+str(ii)]['node_mask'].squeeze().tolist())],axis=1)
+effect = effect[mask_test==1]
+if effect.shape[0] > 50:
+    effect = effect.sample(n=50, random_state=1)
+effect = pd.DataFrame(effect.sum()).T/effect.shape[0]
 effect.columns = list(data_QTL.columns) 
 
 ## Save all results
