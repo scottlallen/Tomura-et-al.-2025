@@ -1,0 +1,10 @@
+---
+title: "renv"
+format: html
+---
+
+# renv
+
+```{r}
+renv::init()
+```
