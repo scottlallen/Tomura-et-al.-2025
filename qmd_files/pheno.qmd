@@ -1,0 +1,35 @@
+---
+title: "pheno"
+format: html
+---
+
+# load libraries
+
+```{r}
+library(tidyverse)
+```
+
+# import data
+
+```{r}
+W22TIL01_pheno <- read_csv("./data_zenodo/W22TIL01_pheno.csv")
+W22TIL03_pheno <- read_csv("./data_zenodo/W22TIL03_pheno.csv")
+W22TIL11_pheno <- read_csv("./data_zenodo/W22TIL11_pheno.csv")
+W22TIL14_pheno <- read_csv("./data_zenodo/W22TIL14_pheno.csv")
+W22TIL25_pheno <- read_csv("./data_zenodo/W22TIL25_pheno.csv")
+```
+
+# bind
+
+```{r}
+
+pheno <- W22TIL01_pheno |> 
+    bind_rows(
+        W22TIL03_pheno, 
+        W22TIL11_pheno, 
+        W22TIL14_pheno, 
+        W22TIL25_pheno
+        )
+
+```
+
