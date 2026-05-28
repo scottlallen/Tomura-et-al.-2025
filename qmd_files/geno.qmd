@@ -1,0 +1,36 @@
+---
+title: "geno"
+format: html
+---
+
+# load libraries
+
+```{r}
+library(tidyverse)
+```
+
+# import data
+
+```{r}
+
+W22TIL01_geno_imputed_flanking <- read_csv("./data_zenodo/W22TIL01_geno_imputed_flanking.csv")
+W22TIL03_geno_imputed_flanking <- read_csv("./data_zenodo/W22TIL03_geno_imputed_flanking.csv")
+W22TIL11_geno_imputed_flanking <- read_csv("./data_zenodo/W22TIL11_geno_imputed_flanking.csv")
+W22TIL14_geno_imputed_flanking <- read_csv("./data_zenodo/W22TIL14_geno_imputed_flanking.csv")
+W22TIL25_geno_imputed_flanking <- read_csv("./data_zenodo/W22TIL25_geno_imputed_flanking.csv")
+
+```
+
+# bind
+
+```{r}
+
+geno <- W22TIL01_geno_imputed_flanking |> 
+    bind_rows(
+        W22TIL03_geno_imputed_flanking, 
+        W22TIL11_geno_imputed_flanking, 
+        W22TIL14_geno_imputed_flanking, 
+        W22TIL25_geno_imputed_flanking
+        )
+
+```

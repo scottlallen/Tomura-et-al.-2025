@@ -3,6 +3,114 @@ title: "pheno"
 format: html
 ---
 
+# data dictionary
+
+## Agronomic Traits
+
+In plain English, agronomic traits are "farming performance" metrics. They describe how a crop grows, how fast it matures, and how well it behaves in a commercial field. Farmers and breeders care about these because they dictate the logistics of a harvest. For example, if a plant takes too long to mature, an early frost could destroy the whole crop. If it grows too tall, a strong wind might knock it over.
+
+**The Breeding Clock (DTA, DTS, ASI)**: Plants need to reproduce to make grain. DTA (Days to Anthesis) is when the male part starts shedding pollen. DTS (Days to Silk) is when the female part puts out silks to catch that pollen. ASI is just the math between them ($DTS - DTA$). If that interval is too wide, the pollen drops before the silks are ready, and you get zero corn kernels.
+
+- ASI (Anthesis–silk interval): The number of days between anthesis and silk (Count)
+- DTA (Days to anthesis): The number of days between planting and when at least one-half of the plants in a plot were shedding pollen (Count)
+- DTS (Days to silk): The number of days between planting and when at least one-half of the plants in a plot were showing silk (Count)
+
+**The Plant's Architecture (PLHT, TBN)**: PLHT is simply how tall the main stalk gets. TBN counts the branches on the tassel at the very top.
+
+- PLHT (Plant height): The distance from the ground to the topmost node on the main stalk (cm)
+- TBN (Tassel branch number): The number of tassel branches on the main stalk (Count)
+
+**The Kernel Check (BARE and YEPE)**: These two metrics evaluate the final product of the farm: the quality and appearance of the ear of corn itself.
+
+- BARE (Barren ear base): A 0–2 scale for the lack of kernels at the base of the ear, where 0 indicates kernels are present at the base and 2 indicates no developed kernels (Score)
+- YEPE (Yellow pericarp): A 0–2 scale representing dull yellow to bright yellow pericarp
+
+## Domestication Traits
+
+In genomics, domestication traits are the physical footprints left behind by human selection. They document the drastic architectural overhaul that occurred when ancient indigenous farmers took teosinte—a highly branched, wildly uncooperative, woody desert grass—and turned it into modern corn, a single-stalked, high-yielding agricultural machine.
+
+Because the replication project crosses modern corn (W22) with wild teosinte (TIL), these metrics tell the model exactly how "wild" or how "domesticated" each individual plant chose to be based on its DNA.
+
+**The Structural Foundation: Bush vs. Stalk**
+
+Wild teosinte doesn't want to look like corn; it wants to look like a massive, bushy hedge. Humans aggressively bred the plant to stop wasting energy on branches so it could focus all its resources on growing a few massive ears.
+
+- TILN (Tiller number): The number of tillers surrounding the main stalk (Count). The number of side-branches surrounding the main stem. Wild teosinte can have dozens of tillers, creating a sprawling bush. Modern corn has been engineered to have a tiller number of exactly 0, standing as a single, solitary pole.
+- CULM (Culm diameter): The diameter of the narrowest plane of the main stalk right above the ground (mm). The thickness of the main stalk right above the ground. Because wild teosinte spreads its weight across dozens of thin, flexible branches, its main stem is quite narrow. Modern corn requires a massive, thick "culm" to act as a structural pillar capable of supporting heavy cobs without falling over.
+
+**Leaf Dimensions: The Solar Panels**
+
+LFLN (Leaf length) & LFWD (Leaf width): These capture the dimensions of the plant's primary solar panels. Wild teosinte leaves tend to be narrow and grassy. Domestication favored wider, longer, structurally optimized leaves that capture maximum sunlight to fuel the immense energy demands of modern grain production.
+
+- LFLN (Leaf length): The length of a well-developed leaf, typically the fourth to sixth from the top (cm)
+- LFWD (Leaf width): The width of a well-developed leaf, typically the fourth to sixth from the top (cm)
+
+**The Ear Metamorphosis: Spikes vs. Cobs**
+
+Botanically, the ear is referred to as the primary lateral inflorescence. A wild teosinte ear looks nothing like a corn cob—it is a tiny, fragile spike containing only 5 to 12 tiny grains.
+
+- EL (Ear length): The length of the primary lateral inflorescence (cm). 
+- ED (Ear diameter): The diameter of the primary lateral inflorescence (mm)
+
+These document the sheer scale of human engineering. Over millennia, humans expanded the ear's length and diameter by thousands of percent, transforming a tiny 2 cm wild spike into a massive, starchy cob.
+
+- EB (Ear branch number): The number of branches on the primary lateral inflorescence (Count). Wild teosinte splits its reproductive energy by creating multi-branched ear structures. Modern corn suppresses this branching completely, resulting in a single, unbranched, highly concentrated cob.
+
+- PROL (Prolificacy): A binary score (0 vs. 1) for the absence or presence of secondary ears at the topmost branch-bearing node on the main stalk (Binary). A binary check of whether secondary ears develop lower down on the stalk. Wild plants attempt to produce as many tiny ears as possible. Modern commercial lines favor low prolificacy (usually just one or two dominant ears) so the combine harvester can strip the field uniformly.
+
+**The Security System: Glumes and Shattering**
+
+Wild plants need to protect their seeds from being eaten and must ensure they drop to the ground to reproduce. Humans wanted the exact opposite: soft, exposed seeds that stay stuck to the plant until a human harvests them.
+
+- GLUM (Glume score): A 0–3 scale for glume size, where 0 indicates small and 3 indicates large (Score). 
+- GLCO (Glume color): A 0–4 scale of glume color ranging from white through brown (Score).
+
+In wild teosinte, each individual seed is securely sealed inside a rock-hard, stony casing called a glume. To eat it, you'd literally have to crack it open like a wild nut. Domestication shrunk these glumes down to the tiny, papery chaff chaff parts you see stuck to a naked corn cob today. The score tracks how massive and protective these protective shells are, while color tracks the pigmentation from ancestral brown (4) to modern white (0).
+
+- SHN (Shattering): The number of pieces an ear shatters into when dropped to the floor from a height of ~1.8 meters (Count). This measures how easily an ear breaks apart. A wild teosinte ear is designed to shatter into individual pieces the second it matures so its seeds can scatter into the soil. Domesticated corn has zero shattering; the kernels are locked tight to the cob, entirely dependent on humans to shell and plant them.
+
+**Grain Layout & Floral Identity**
+
+- STAM (Staminate spikelet): A 0–3 scale for spikelet sex on the primary lateral inflorescence, where 0 indicates completely feminized and 3 indicates completely staminate (Score). This tracks a fascinating evolutionary glitch. Modern corn completely separated its sexes: the male flowers live exclusively at the top (the tassel), and the female flowers live on the side (the ear). Wild teosinte is messy, often growing male tissues (staminate spikelets) right out of the top of its female ears. A high STAM score means a plant's genetics are glitching back to its ancient, mixed-sex ancestral roots.
+- KRN (Kernel row number): The number of internode columns on the primary lateral inflorescence (Count). Wild teosinte organizes its seeds in exactly two interlocking rows. Modern corn cobs are highly symmetrical, packing seeds into tightly compressed layouts of 8, 12, 16, or even 20 parallel rows.
+- KW (Kernel weight): The average weight of 50 random kernels from five ears (g). The ultimate bottom line. This scales up from the weight of tiny, lightweight teosinte pebbles to heavy, starch-filled modern corn kernels.
+- REPE (Red pericarp): A 0–2 scale for colorless to red pericarp (Score). The skin color of the kernel. This score tracks the presence of vibrant red anthocyanin pigments in the kernel skin, a historic genetic trait that breeders track to manage grain appearance and antioxidant profiles.
+
+## Environmental Suffixes & Independent Columns
+
+In quantitative genetics, data is never just about the DNA ($G$ for Genotype) or the physical trait ($P$ for Phenotype). There is a silent, massive third variable that controls everything: The Environment ($E$).
+
+Plants cannot move. If it gets too hot, too dry, or the soil changes ten feet to the left, the plant has to adapt right there. Because of this, the exact same seed planted in 2015 might grow completely differently when planted in 2016.
+
+This phenomenon is called Genotype-by-Environment Interaction ($G \times E$). It is the ultimate puzzle in agricultural data science, and it’s exactly why your data has these specific year and block suffixes.
+
+**S15 & S16: The Multi-Year Weather Test**
+
+- S15: Grown in the summer of 2015
+- S16: Grown in the summer of 2016
+
+Think about what changes between two summers: total rainfall, the timing of heatwaves, cloud cover, and pest pressure.
+
+- A specific wild gene from TIL01 might cause a plant to flower incredibly early under the hot, dry conditions of 2015 to escape heat stress.
+- But in the cooler, wetter summer of 2016, that same gene might tell the plant to take its time and grow taller instead.
+
+By tracking S15 and S16 separately, the authors can see which genetic markers are "stable superstars" (meaning they perform well no matter the weather) versus markers that are highly sensitive to year-to-year climate shifts.
+
+**S17A & S17B: Spatial Micro-Environments & "Blocking"**
+
+- S17A & S17B: Grown in the summer of 2017. The A and B represent the two different blocks used specifically to grow the W22 x TIL25 subpopulation
+
+An agricultural research field looks uniform from afar, but underneath the surface, it's a patchwork. The north end of a field might have clay-heavy soil that traps water, while the south end might be sandy and drain too quickly. There might even be a slight slope that causes fertilizer to wash downward.
+
+To prevent these soil differences from ruining the data, scientists use Blocks:
+
+- They split the field into physically distinct zones (Block A and Block B).
+- They plant copies of the exact same genetic lines in both blocks.
+- If a plant performs poorly in both Block A and Block B, it's a safe bet that its poor performance is due to its genetics. If it only performs poorly in Block A, it probably just got stuck in a bad patch of dirt.
+
+Why only the W22 x TIL25 subpopulation?
+In large-scale genomic trials, seed supply is a constant bottleneck. You need hundreds of seeds per line to replicate them across multiple years and multiple blocks. The researchers likely had an abundance of high-quality seeds for the TIL25 family in 2017, allowing them to run this rigorous dual-block spatial experiment, whereas other families may have had limited seed counts or were prioritized for baseline multi-year testing.
+
 # load libraries
 
 ```{r}
