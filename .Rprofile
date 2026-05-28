@@ -1,5 +1,5 @@
 source("renv/activate.R")
-# Fix Norton firewall and CRAN download blocks for this project
+# Ultimate bypass for Norton SSL interception
 options(renv.config.download.override = utils::download.file)
-options(download.file.method = "wininet")
-options(repos = c(CRAN = "http://cloud.r-project.org"))
+options(download.file.extra = "--insecure")
+options(repos = c(CRAN = "https://cloud.r-project.org"))
