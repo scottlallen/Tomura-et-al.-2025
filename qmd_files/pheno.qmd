@@ -140,4 +140,3 @@ pheno <- W22TIL01_pheno |>
         )
 
 ```
-

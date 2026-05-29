@@ -13,6 +13,12 @@ library(tidyverse)
 
 ```{r}
 
+W22TIL01_geno_imputed <- read_csv("./data_zenodo/W22TIL01_geno_imputed.csv")
+W22TIL03_geno_imputed <- read_csv("./data_zenodo/W22TIL03_geno_imputed.csv")
+W22TIL11_geno_imputed <- read_csv("./data_zenodo/W22TIL11_geno_imputed.csv")
+W22TIL14_geno_imputed <- read_csv("./data_zenodo/W22TIL14_geno_imputed.csv")
+W22TIL25_geno_imputed <- read_csv("./data_zenodo/W22TIL25_geno_imputed.csv")
+
 W22TIL01_geno_imputed_flanking <- read_csv("./data_zenodo/W22TIL01_geno_imputed_flanking.csv")
 W22TIL03_geno_imputed_flanking <- read_csv("./data_zenodo/W22TIL03_geno_imputed_flanking.csv")
 W22TIL11_geno_imputed_flanking <- read_csv("./data_zenodo/W22TIL11_geno_imputed_flanking.csv")
@@ -25,12 +31,20 @@ W22TIL25_geno_imputed_flanking <- read_csv("./data_zenodo/W22TIL25_geno_imputed_
 
 ```{r}
 
-geno <- W22TIL01_geno_imputed_flanking |> 
+geno_imputed_flanking <- W22TIL01_geno_imputed_flanking |> 
     bind_rows(
         W22TIL03_geno_imputed_flanking, 
         W22TIL11_geno_imputed_flanking, 
         W22TIL14_geno_imputed_flanking, 
         W22TIL25_geno_imputed_flanking
+        )
+
+geno_imputed <- W22TIL01_geno_imputed |> 
+    bind_rows(
+        W22TIL03_geno_imputed, 
+        W22TIL11_geno_imputed, 
+        W22TIL14_geno_imputed, 
+        W22TIL25_geno_imputed
         )
 
 ```
