@@ -1,0 +1,67 @@
+---
+title: "EDA W22TIL01"
+format: html
+---
+
+# load libraries
+
+```{r}
+#| eval: true
+#| output: false
+#| warning: false
+
+library(tidyverse)
+```
+
+# import data
+
+```{r}
+#| eval: true
+#| output: false
+#| warning: false
+
+W22TIL01_pheno <- read_csv("C:\\GitHub\\Tomura-et-al.-2025\\data_zenodo\\W22TIL01_pheno.csv")
+W22TIL01_geno_imputed <- read_csv("C:\\GitHub\\Tomura-et-al.-2025\\data_zenodo\\W22TIL01_geno_imputed.csv")
+```
+
+# EDA
+
+## pheno
+
+### DTA
+
+#### S15 to S16 correlation
+
+```{r}
+W22TIL01_pheno |> 
+    ggplot(aes(x = `DTA_S15 Data`, y = `DTA_S16 Data`)) + 
+    geom_point() + 
+    geom_smooth()
+```
+
+```{r}
+cor.test(W22TIL01_pheno$`DTA_S15 Data`, W22TIL01_pheno$`DTA_S16 Data`)
+```
+
+- The correlation is quite strong, assume little GxE for DTA in this RIL population.
+
+### TILN
+
+#### S15 to S16 correlation
+
+```{r}
+W22TIL01_pheno |> 
+    ggplot(aes(x = `TILN_S15 Data`, y = `TILN_S16 Data`)) + 
+    geom_point() + 
+    geom_smooth()
+```
+
+```{r}
+cor.test(
+    W22TIL01_pheno$`TILN_S15 Data`, 
+    W22TIL01_pheno$`TILN_S16 Data`, 
+    method = "spearman")
+```
+
+- There appears to be an outlier RIL where TILN was much greater in S15 than S16.
+
