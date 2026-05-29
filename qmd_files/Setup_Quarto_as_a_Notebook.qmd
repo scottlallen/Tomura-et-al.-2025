@@ -1,0 +1,37 @@
+---
+title: "Setup Quarto as a Notebook"
+format: html
+---
+
+# Troubleshooting Guide: Enabling Quarto Notebook Mode in Positron with renv
+
+When transitioning from RStudio to Positron, configuring Quarto (.qmd) documents to behave like traditional Jupyter or R Markdown notebooks requires a couple of specific settings—especially if your file sits inside a project subdirectory using renv.
+
+Here is the exact blueprint to get inline outputs working perfectly.
+
+## Step 1: Enable Inline Output (Notebook Mode)
+
+By default, Positron sends Quarto plots and console outputs to separate dedicated IDE panes. To force them to render directly beneath your code chunks:
+
+- Open Settings using `Ctrl +` , (Windows/Linux) or `Cmd +` , (macOS).
+- Search for the setting ID: positron.quarto.inlineOutput.enabled
+- Check the box to enable it.
+
+## Step 2: Fix the renv Subdirectory Trap
+
+Once inline output is enabled, Positron spins up a background notebook kernel (Ark) to run your chunks.
+
+The Problem: Positron sets the working directory of this background session to the exact subfolder where your .qmd file lives. Because it bypasses the project root folder, it completely skips your root .Rprofile, meaning renv never auto-activates.
+
+### The Solution: Manually Load the Parent Environment
+
+Add a hidden initialization chunk at the very top of your .qmd file using renv::load(). This explicitly points the background session to your project root library without trying to download anything:
+
+```{r}
+#| eval: true
+#| output: false
+#| warning: false
+
+# Directs renv to look one level up at the project root
+renv::load("..")
+```
