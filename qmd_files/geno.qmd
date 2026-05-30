@@ -3,6 +3,41 @@ title: "geno"
 format: html
 ---
 
+# data dictionary
+
+## Genotyping-by-Sequencing (GBS)
+
+### 1. The Upstream Molecular Protocol (Data Generation)
+
+- **Digestion**: Genomic DNA is digested using a **restriction enzyme**. In maize and teosinte, a **methylation-sensitive enzyme** (classically ApeKI) is typically chosen. Because repetitive heterochromatin in plants is heavily methylated, the enzyme skips these regions and preferentially cuts low-copy, gene-rich euchromatin. This naturally targets the sequencing power to biologically informative regions. The enzyme ApeKI is **specifically sensitive to TE** methylated regions rather than regulatory methylation.
+- **Ligation & Barcoding**: Two types of adapters are ligated to the sticky ends of the fragments: a barcoded adapter (unique to each individual sample/line) and a common adapter.
+- **Pooling (Multiplexing)**: Samples are pooled together into a single library lane (often 96-plex or 384-plex) and amplified via PCR.
+- **Sequencing**: The pooled library is sequenced on an Illumina platform, yielding millions of short, single-end reads containing the barcode, the restriction site remnant, and the genomic insert.
+
+### 2. The Computational Pipeline: TASSEL-GBS (Glaubitz et al. 2014)
+
+Because GBS data consists of short reads clustered heavily around fixed restriction sites, **many of the reads are duplicates**, and standard alignment tools (like BWA or Bowtie) applied directly to raw fastq files can be computationally inefficient. Instead, the authors utilized the TASSEL-GBS pipeline, which uses a "read-collapsing" strategy:
+
+- **Collapsing Reads into "Tags"**: The pipeline scans the raw fastq files, identifies the sample barcodes, removes them, and collapses identical sequence reads into unique, master biological sequences called Tags (truncated to a uniform length, usually 64 bp). This reduces the data scale by orders of magnitude.
+- **Building the TOPM Matrix**: Only tags appearing multiple times across the entire experiment are kept (to eliminate sequencing errors). These master tags are aligned to the reference genome (in this paper, Maize B73 reference AGPv2) to generate a TOPM (Tags On Physical Map) file.
+- **Building the TBT Matrix**: Concurrently, the pipeline counts how many times each master tag appears in each individual RIL, creating a TBT (Tags By Taxa) file.
+- **SNP Calling**: By cross-referencing the physical map (TOPM) and the individual counts (TBT), the pipeline identifies mismatches between tags mapping to the same genomic locus and generates raw SNP calls.
+
+### 3. Overcoming Matrix Sparsity: FSFHap Imputation
+
+The **biggest hurdle** you will face when dealing with GBS data is high **missingness** (matrix sparsity) and a tendency to **under-call heterozygotes** (due to low read depth at any given restriction site). In this paper, the initial pipeline yielded 955,690 raw SNPs, but with an incredibly high missing data rate.To fix this, the authors leveraged the structural design of their population using FSFHap (Full-Sibling Family Haplotype) **Imputation** in TASSEL5:
+
+- **The Biology Behind the Code**: The TeoNAM panel is a structured, multiparental population. Five teosinte founders were crossed to a common maize parent (W22), backcrossed once, and selfed for four generations ($BC_1S_4$). This means the lines are organized into explicit biparental families with large, predictable blocks of parental haplotypes.
+- **The Algorithm**: FSFHap uses a first-order Hidden Markov Model (HMM). The hidden states are the true, underlying identity-by-descent (IBD) parental haplotype blocks, and the observed states are the sparse, noisy GBS SNP calls.
+- **The Result**: Because the parental genomes are well-characterized, the HMM can precisely pinpoint where recombination breakpoints occurred in each RIL. Once the breakpoint coordinates are established, the algorithm fills in ("imputes") the missing data gaps with near-perfect accuracy based on the known parental sequence.
+
+### 4. Post-Processing and Functional Mapping
+
+Following imputation, the data structure transforms from an unmanageably sparse matrix into a highly dense, complete genotype file:
+
+- **Filtering**: After imputation filled the gaps, the authors filtered the SNPs down. For Joint Linkage Mapping (JLM), they thinned sites to unique physical positions, arriving at 51,544 high-confidence SNPs. For GWAS, where minor structural variants matter more, they used slightly different filtering thresholds to retain 118,838 SNPs.
+- **Coordinate LiftOver**: Because the initial TASSEL reference database was built on an older genome assembly version, they used CrossMap to convert the coordinates of their final SNP set from B73 AGPv2 to the modernized AGPv4 reference coordinates.
+
 # load libraries
 
 ```{r}
